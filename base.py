@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 from ultralytics import YOLO
 
-model = YOLO('best.pt')
+model = YOLO('last.pt')
 
 cap = cv2.VideoCapture('vid2.mp4')
 
@@ -19,13 +19,13 @@ while True:
         boxes = results[0].boxes.data
         px = pd.DataFrame(boxes).astype("float")
         for index, row in px.iterrows():
-
             x1 = int(row[0])
             y1 = int(row[1])
             x2 = int(row[2])
             y2 = int(row[3])
             class_id = int(row[5])
             cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
+            cv2.putText(frame, class_names[class_id], (x1 + 5, y1 + 5), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
             class_counts[class_names[class_id]] += 1
 
         cv2.putText(frame, 'Class counts:', (10, 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
